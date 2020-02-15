@@ -54,7 +54,7 @@ export default () => {
               gap="x4"
               grow>
             <Flex>
-              <Logo height="1.75rem" width="1.75rem" />
+              <Logo height="32px" width="32px" />
             </Flex>
           </Flex>
 
@@ -81,7 +81,7 @@ export default () => {
           </Flex>
         </Flex>
 
-        <Flex direction="vertical" grow>
+        <Flex basis="none" direction="vertical" grow>
           <Switch>
             <Route component={ About } path="/about" />
             <Route component={ EditorLibrary } path="/library" />

@@ -32,7 +32,7 @@ export default class EditorDrawer {
   viewX: number;
   viewY: number;
 
-  constructor(container: HTMLDivElement) {
+  constructor(container: HTMLElement) {
     this.two = new Two({
       autostart: true,
       height: 0,

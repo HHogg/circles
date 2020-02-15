@@ -1,7 +1,7 @@
 import * as React from 'react';
 import classnames from 'classnames';
 import FileSaver from 'file-saver';
-import { useEventListener, useResizeObserver, Flex } from 'preshape';
+import { useEventListener, useResizeObserver, Appear, Flex } from 'preshape';
 import { Data, TypeMode, IntersectionCircle, Intersection } from '../../Types';
 import { onMouseDownGlobal, onMouseUpGlobal } from '../../utils/Two';
 import atan2 from '../../utils/math/atan2';
@@ -74,7 +74,7 @@ export default (props: Props) => {
   const refActiveCirclePre = React.useRef<IntersectionCircle | null>(null);
   const refActiveIntersectionPre = React.useRef<Intersection | null>(null);
   const [size, refBounds] = useResizeObserver();
-  const refContainer = React.useRef<HTMLDivElement>(null);
+  const [refContainer, setRefContainer] = React.useState<HTMLElement | null>(null);
   const refDraw = React.useRef<EditorDrawer>();
   const refHistory = React.useRef<EditorHistory>();
   const refIsAdding = React.useRef(false);
@@ -92,14 +92,14 @@ export default (props: Props) => {
   };
 
   const setCursor = (cursor: TypeEditorCursor) => {
-    if (refContainer.current) {
-      refContainer.current.style.cursor = cursor;
+    if (refContainer) {
+      refContainer.style.cursor = cursor;
     }
   };
 
   const setToolbarTargetActiveShape = () => {
-    if (refActiveCircle.current && refContainer.current && refDraw.current) {
-      const { left, top } = refContainer.current.getBoundingClientRect();
+    if (refActiveCircle.current && refContainer && refDraw.current) {
+      const { left, top } = refContainer.getBoundingClientRect();
       const { radius, x, y } = refDraw.current.transformCircleToWindow(refActiveCircle.current);
 
       setToolbarTarget({
@@ -113,8 +113,8 @@ export default (props: Props) => {
 
   const getRelativeCoordinates = ({ clientX, clientY }: PointerEvent | React.PointerEvent) => {
     if (refDraw.current) {
-      if (refContainer.current) {
-        const { left, top } = refContainer.current.getBoundingClientRect();
+      if (refContainer) {
+        const { left, top } = refContainer.getBoundingClientRect();
         return refDraw.current.transformCoordinatesToView(clientX - left, clientY - top);
       }
 
@@ -252,7 +252,7 @@ export default (props: Props) => {
     refIsMoving.current = false;
     refIsResizing.current = false;
 
-    if (!refContainer.current?.contains(event.target as Node)) {
+    if (!refContainer?.contains(event.target as Node)) {
       return setToolbarTarget(null);
     }
 
@@ -336,16 +336,16 @@ export default (props: Props) => {
     }
   };
 
-  React.useEffect(() => {
-    if (refContainer.current && !refDraw.current && !refHistory.current) {
+  React.useLayoutEffect(() => {
+    if (refContainer && !refDraw.current && !refHistory.current) {
       refHistory.current = new EditorHistory(setTimeState);
-      refDraw.current = new EditorDrawer(refContainer.current);
+      refDraw.current = new EditorDrawer(refContainer);
       refDraw.current?.setSize(size);
       refDraw.current?.setData(data);
       refDraw.current?.setMode(mode);
       refDraw.current?.draw(debug);
     }
-  }, [refContainer.current]);
+  }, [refContainer]);
 
   React.useEffect(() => {
     refDraw.current?.setSize(size);
@@ -373,13 +373,17 @@ export default (props: Props) => {
           grow
           ref={ refBounds }>
 
-        { !!(size.height && size.width) && (
-          <Flex
-              absolute="fullscreen"
-              className={ classes }
-              onPointerDown={ handlePointerDown }
-              ref={ refContainer } />
-        ) }
+        <Flex absolute="fullscreen">
+          { !!size.height && !!size.width && (
+            <Appear animation="Fade">
+              <Flex
+                  absolute="fullscreen"
+                  className={ classes }
+                  onPointerDown={ handlePointerDown }
+                  ref={ setRefContainer } />
+            </Appear>
+          ) }
+        </Flex>
 
         <EditorToolbar
             onCopy={ handleCopyActiveShape }
