@@ -171,13 +171,3 @@ const arcsToAnchors = (arcs, closed) => {
 
   return anchors;
 };
-
-export const onMouseDownGlobal = () => {
-  document.body.style.userSelect = 'none';
-  document.body.style.webkitUserDrag = 'none';
-};
-
-export const onMouseUpGlobal = () => {
-  document.body.style.userSelect = null;
-  document.body.style.webkitUserDrag = null;
-};

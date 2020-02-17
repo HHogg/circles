@@ -3,7 +3,6 @@ import classnames from 'classnames';
 import FileSaver from 'file-saver';
 import { useEventListener, useResizeObserver, Appear, Flex } from 'preshape';
 import { Data, TypeMode, IntersectionCircle, Intersection } from '../../Types';
-import { onMouseDownGlobal, onMouseUpGlobal } from '../../utils/Two';
 import atan2 from '../../utils/math/atan2';
 import isPointOverCircleEdge from '../../utils/math/isPointOverCircleEdge';
 import EditorControls from './EditorControls';
@@ -12,6 +11,13 @@ import EditorHistory from './EditorHistory';
 import EditorToolbar from './EditorToolbar';
 import URLStateContext from '../URLState/URLStateContext';
 import './Editor.css';
+
+interface MinimalEvent {
+  clientX: number;
+  clientY: number;
+  target: null | EventTarget;
+  type: string;
+}
 
 type TypeEditorCursor =
   'default' |
@@ -31,8 +37,8 @@ interface ToolbarTarget {
 }
 
 const COPY_OFFSET = 25;
-const TOLERANCE_CREATE_SHAPE = 3;
-const TOLERANCE_SELECT_SHAPE = 3;
+const TOLERANCE_CREATE_CIRCLE = 3;
+const TOLERANCE_SELECT_CIRCLE = 3;
 
 const CURSOR_DEFAULT: TypeEditorCursor = 'default';
 const CURSOR_DRAW: TypeEditorCursor = 'crosshair';
@@ -42,6 +48,25 @@ const CURSOR_RESIZE_T_B: TypeEditorCursor = 'ns-resize';
 const CURSOR_RESIZE_BL_TR: TypeEditorCursor = 'nesw-resize';
 const CURSOR_RESIZE_L_R: TypeEditorCursor = 'ew-resize';
 const CURSOR_RESIZE_BR_TL: TypeEditorCursor = 'nwse-resize';
+
+const onMouseDownGlobal = () => {
+  document.body.style.userSelect = 'none';
+  document.body.style.webkitUserDrag = 'none';
+};
+
+const onMouseUpGlobal = () => {
+  delete document.body.style.userSelect;
+  delete document.body.style.webkitUserDrag;
+};
+
+
+const minimalEvent = (event: React.TouchEvent | TouchEvent): MinimalEvent => ({
+  clientX: event.touches[0]?.clientX,
+  clientY: event.touches[0]?.clientY,
+  target: event.target,
+  type: event.type,
+});
+
 
 const getCursor = (px: number, py: number, cx: number, cy: number) => {
   const a = atan2(px, py, cx, cy) * 180 / Math.PI;
@@ -71,8 +96,6 @@ export default (props: Props) => {
   const [toolbarTarget, setToolbarTarget] = React.useState<ToolbarTarget | null>(null);
   const refActiveCircle = React.useRef<IntersectionCircle | null>(null);
   const refActiveCirclePost = React.useRef<IntersectionCircle | null>(null);
-  const refActiveCirclePre = React.useRef<IntersectionCircle | null>(null);
-  const refActiveIntersectionPre = React.useRef<Intersection | null>(null);
   const [size, refBounds] = useResizeObserver();
   const [refContainer, setRefContainer] = React.useState<HTMLElement | null>(null);
   const refDraw = React.useRef<EditorDrawer>();
@@ -111,7 +134,7 @@ export default (props: Props) => {
     }
   };
 
-  const getRelativeCoordinates = ({ clientX, clientY }: PointerEvent | React.PointerEvent) => {
+  const getRelativeCoordinates = ({ clientX, clientY }: MinimalEvent) => {
     if (refDraw.current) {
       if (refContainer) {
         const { left, top } = refContainer.getBoundingClientRect();
@@ -127,7 +150,7 @@ export default (props: Props) => {
     };
   };
 
-  const handleAddShape = (x: number, y: number, radius = TOLERANCE_CREATE_SHAPE) => {
+  const handleAddShape = (x: number, y: number, radius = TOLERANCE_CREATE_CIRCLE) => {
     if (refDraw.current) {
       const circle = refDraw.current.addCircle({ x, y, radius });
 
@@ -224,21 +247,88 @@ export default (props: Props) => {
     }
   };
 
-  const handlePointerDown = (event: React.PointerEvent) => {
-    const { x, y } = getRelativeCoordinates(event);
-    const circle = refActiveCirclePre.current;
+  const handleMouseDown = (event: MinimalEvent) => {
+    if (refDraw.current) {
+      const { x, y } = getRelativeCoordinates(event);
+      const circle = refDraw.current.getCircleAtCoordinates(x, y, TOLERANCE_SELECT_CIRCLE);
 
-    refIsPointerDown.current = true;
-    onMouseDownGlobal();
-    setActiveCircle(circle);
+      refIsPointerDown.current = true;
+      onMouseDownGlobal();
+      setActiveCircle(circle);
 
-    if (mode === 'draw') {
-      refPointerPosition.current = [x, y];
-      refIsResizing.current = !!circle && isPointOverCircleEdge(x, y, circle.x, circle.y, circle.radius, TOLERANCE_SELECT_SHAPE);
+      if (mode === 'draw') {
+        refPointerPosition.current = [x, y];
+
+        if (circle) {
+          refActiveCircle.current = circle;
+
+          if (isPointOverCircleEdge(x, y, circle.x, circle.y, circle.radius, TOLERANCE_SELECT_CIRCLE)) {
+            refIsResizing.current = true;
+          } else {
+            refIsMoving.current = true;
+          }
+        }
+      }
     }
   };
 
-  const handlePointerUp = (event: PointerEvent) => {
+  const handlePointerDrag = (event: MinimalEvent) => {
+    if (mode === 'draw') {
+      const { x, y } = getRelativeCoordinates(event);
+      const [startX, startY] = refPointerPosition.current;
+      const deltaX = x - startX;
+      const deltaY = y - startY;
+
+      if (refActiveCircle.current) {
+        setToolbarTarget(null);
+
+        if (refIsResizing.current) {
+          handleResizeActiveShape(x, y);
+        } else {
+          handleMoveActiveShape(deltaX, deltaY);
+        }
+      } else if (Math.hypot(deltaX, deltaY) > TOLERANCE_CREATE_CIRCLE) {
+        handleAddShape(x, y);
+        refIsAdding.current = true;
+        refIsResizing.current = true;
+      }
+    }
+  };
+
+  const handleMouseMove = (event: MinimalEvent) => {
+    if (refIsPointerDown.current) {
+      return handlePointerDrag(event);
+    }
+
+    if (refDraw.current) {
+      if (props.mode === 'draw') {
+        const { x, y } = getRelativeCoordinates(event);
+        const circle = refDraw.current.getCircleAtCoordinates(x, y, TOLERANCE_SELECT_CIRCLE);
+
+        if (circle) {
+          if (isPointOverCircleEdge(x, y, circle.x, circle.y, circle.radius, TOLERANCE_SELECT_CIRCLE)) {
+            setCursor(getCursor(x, y, circle.x, circle.y));
+          } else {
+            setCursor(CURSOR_MOVE);
+          }
+        } else {
+          setCursor(CURSOR_DRAW);
+        }
+      }
+
+      if (mode === 'fill') {
+        const intersection = refDraw.current.getIntersectionByDOMElement(event.target as Node) || null;
+
+        if (intersection) {
+          setCursor(CURSOR_FILL);
+        } else {
+          setCursor(CURSOR_DEFAULT);
+        }
+      }
+    }
+  };
+
+  const handleMouseUp = (event: MinimalEvent) => {
     onMouseUpGlobal();
 
     if ((refIsResizing.current || refIsMoving.current)) {
@@ -265,66 +355,20 @@ export default (props: Props) => {
       }
     }
 
-    if (mode === 'fill' && refActiveIntersectionPre.current) {
-      handleSelectIntersection(refActiveIntersectionPre.current);
-    }
-  };
+    if (mode === 'fill') {
+      const intersection = refDraw.current?.getIntersectionByDOMElement(event.target as Node) || null;
 
-  const handlePointerDrag = (event: PointerEvent) => {
-    if (mode === 'draw') {
-      const { x, y } = getRelativeCoordinates(event);
-      const [startX, startY] = refPointerPosition.current;
-      const deltaX = x - startX;
-      const deltaY = y - startY;
-
-      if (refActiveCircle.current) {
-        setToolbarTarget(null);
-
-        if (refIsResizing.current) {
-          handleResizeActiveShape(x, y);
-        } else {
-          refIsMoving.current = true;
-          handleMoveActiveShape(deltaX, deltaY);
-        }
-      } else if (Math.hypot(deltaX, deltaY) > TOLERANCE_CREATE_SHAPE) {
-        handleAddShape(x, y);
-        refIsAdding.current = true;
-        refIsResizing.current = true;
+      if (intersection) {
+        handleSelectIntersection(intersection);
       }
     }
   };
 
-  const handlePointerMove = (event: PointerEvent) => {
-    if (refIsPointerDown.current) {
-      return handlePointerDrag(event);
-    }
+  const handleTouchEnd = (event: TouchEvent) => {
+    handleMouseUp(minimalEvent(event));
 
-    if (refDraw.current) {
-      if (props.mode === 'draw') {
-        const { x, y } = getRelativeCoordinates(event);
-        const shape = refActiveCirclePre.current = refDraw.current.getShapeAtCoordinates(x, y, TOLERANCE_SELECT_SHAPE);
-
-        if (shape) {
-          if (isPointOverCircleEdge(x, y, shape.x, shape.y, shape.radius, TOLERANCE_SELECT_SHAPE)) {
-            setCursor(getCursor(x, y, shape.x, shape.y));
-          } else {
-            setCursor(CURSOR_MOVE);
-          }
-        } else {
-          setCursor(CURSOR_DRAW);
-        }
-      }
-
-      if (mode === 'fill') {
-        refActiveIntersectionPre.current = refDraw.current.getIntersectionByDOMElement(event.target as Node) || null;
-
-        if (refActiveIntersectionPre.current) {
-          setCursor(CURSOR_FILL);
-        } else {
-          refActiveIntersectionPre.current = null;
-          setCursor(CURSOR_DEFAULT);
-        }
-      }
+    if (refContainer?.contains(event.target as Node)) {
+      event.preventDefault();
     }
   };
 
@@ -362,8 +406,10 @@ export default (props: Props) => {
     refDraw.current?.draw(debug);
   }, [theme]);
 
-  useEventListener(document, 'pointerup', handlePointerUp, [mode]);
-  useEventListener(document, 'pointermove', handlePointerMove, [mode]);
+  useEventListener(document, 'mouseup', handleMouseUp, [mode]);
+  useEventListener(document, 'mousemove', handleMouseMove, [mode]);
+  useEventListener(document, 'touchend', handleTouchEnd, [mode]);
+  useEventListener(document.body, 'touchmove', (event) => event.preventDefault(), [], { passive: false });
 
   return (
     <Flex direction="vertical" grow>
@@ -379,8 +425,10 @@ export default (props: Props) => {
               <Flex
                   absolute="fullscreen"
                   className={ classes }
-                  onPointerDown={ handlePointerDown }
-                  ref={ setRefContainer } />
+                  onMouseDown={ handleMouseDown }
+                  onTouchMove={ (e) => handleMouseMove(minimalEvent(e)) }
+                  onTouchStart={ (e) => handleMouseDown(minimalEvent(e)) }
+                  ref={ (el) => setRefContainer(el as HTMLElement) } />
             </Appear>
           ) }
         </Flex>

@@ -43,11 +43,11 @@ export default (props: Props) => {
           padding="x1"
           textColor="background-shade-1">
         <Buttons>
-          <Button fill onPointerUp={ onCopy }>
+          <Button fill onClick={ onCopy }>
             <Icon name="Copy" size="1rem" />
           </Button>
 
-          <Button color="negative" fill onPointerDown={ onDelete }>
+          <Button color="negative" fill onClick={ onDelete }>
             <Icon name="Delete" size="1rem" />
           </Button>
         </Buttons>

@@ -135,7 +135,7 @@ export default class EditorDrawer {
     };
   }
 
-  getShapeAtCoordinates(x: number, y: number, padding: number) {
+  getCircleAtCoordinates(x: number, y: number, padding: number) {
     if (this.circles){
       for (let i = this.circles.length - 1; i >= 0; i--) {
         const { x: cx, y: cy, radius } = this.circles[i];
