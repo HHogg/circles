@@ -2,11 +2,13 @@ import * as React from 'react';
 import {
   Flex,
   Link,
+  Modal,
+  ModalBody,
+  ModalHeader,
   Text,
 } from 'preshape';
 import Logo from '../Logo/Logo';
 import URLStateContext from '../URLState/URLStateContext';
-import Modal from '../Modal/Modal';
 
 export default () => {
   const { pushWithState } = React.useContext(URLStateContext);
@@ -17,11 +19,14 @@ export default () => {
 
   return (
     <Modal
+        margin="x6"
         maxWidth="600px"
         onClose={ handleClose }
-        title="About"
+        padding="x6"
         visible>
-      <Flex padding="x6">
+      <ModalHeader />
+
+      <ModalBody>
         <Flex alignChildren="middle" direction="vertical" margin="x4">
           <Logo height="6rem" width="6rem" />
         </Flex>
@@ -33,7 +38,7 @@ export default () => {
         </Text>
 
         <Text align="middle" margin="x4">
-          This was also an experiement to try out a new way of calculating all of the
+          This was also an experiment to try out a new way of calculating all of the
           intersections areas with little geometry. If you're interested in reading more
           about this, you can read about it <Link href="https://hogg.io/writings/circle-intersections" underline>on my website</Link>.
         </Text>
@@ -41,8 +46,16 @@ export default () => {
         <Text margin="x8">
           <Text align="middle" strong>Harrison Hogg</Text>
           <Text align="middle">Software Engineer</Text>
+          <Text align="middle">
+            <Link
+                href="https://hogg.io"
+                target="HoggIO"
+                underline>
+              https://hogg.io
+            </Link>
+          </Text>
         </Text>
-      </Flex>
+      </ModalBody>
     </Modal>
   );
 };

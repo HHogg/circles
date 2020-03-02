@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Flex, Grid, Link, Text } from 'preshape';
+import { Flex, Grid, Link, Modal, ModalBody, ModalHeader, Text } from 'preshape';
 import { Data } from '../../Types';
 import configurations from './configurations';
 import { DataContext } from '../App/App';
 import URLStateContext from '../URLState/URLStateContext';
-import Modal from '../Modal/Modal';
 
 export default () => {
   const { onSetData } = React.useContext(DataContext);
@@ -21,45 +20,45 @@ export default () => {
 
   return (
     <Modal
-        fullHeight
+        gap="x6"
+        margin="x6"
         maxWidth="800px"
         onClose={ handleClose }
-        title="Library"
+        padding="x6"
+        scrollable
         visible>
-      <Flex direction="vertical" grow>
-        <Flex basis="none" direction="vertical" grow scrollable>
-          <Flex basis="none" grow>
-            <Flex paddingHorizontal="x6" paddingVertical="x6">
-              <Grid
-                  gap="x6"
-                  margin="x6"
-                  repeatWidthMin="180px">
-                { configurations.map(({ author, config, name, Thumbnail }) => (
-                  <Link
-                      backgroundColor="background-shade-2"
-                      borderSize="x2"
-                      display="block"
-                      key={ name }
-                      onClick={ () => handleSelect(config) }
-                      padding="x3">
-                    <Flex direction="vertical" height="100%">
-                      <Flex grow>
-                        { Thumbnail && <Thumbnail /> }
-                      </Flex>
+      <ModalHeader>
+        <Text strong>Library</Text>
+      </ModalHeader>
 
-                      <Flex>
-                        <Text size="x1" strong>{ name }</Text>
-                        { author && <Text emphasis size="x1">by { author }</Text> }
-                      </Flex>
-                    </Flex>
-                  </Link>
-                ))
-                }
-              </Grid>
-            </Flex>
-          </Flex>
-        </Flex>
-      </Flex>
+      <ModalBody>
+        <Grid
+            gap="x6"
+            margin="x6"
+            repeatWidthMin="180px">
+          { configurations.map(({ author, config, name, Thumbnail }) => (
+            <Link
+                backgroundColor="background-shade-1"
+                borderSize="x2"
+                display="block"
+                key={ name }
+                onClick={ () => handleSelect(config) }
+                padding="x3">
+              <Flex direction="vertical" height="100%">
+                <Flex grow>
+                  { Thumbnail && <Thumbnail /> }
+                </Flex>
+
+                <Flex>
+                  <Text size="x1" strong>{ name }</Text>
+                  { author && <Text emphasis size="x1">by { author }</Text> }
+                </Flex>
+              </Flex>
+            </Link>
+          ))
+          }
+        </Grid>
+      </ModalBody>
     </Modal>
   );
 };

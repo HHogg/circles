@@ -49,7 +49,7 @@
     "open-color": "^1.7.0",
     "parcel-bundler": "^1.12.3",
     "postcss-preset-env": "^6.6.0",
-    "preshape": "^4.1.3",
+    "preshape": "^4.2.0",
     "react": ">=16.6.0",
     "react-dom": ">=16.6.0",
     "react-hot-loader": "^4.12.18",
