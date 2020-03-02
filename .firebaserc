@@ -1,5 +1,14 @@
 {
   "projects": {
-    "default": "circle-art-1c3bb"
+    "default": "hoggio-2524a"
+  },
+  "targets": {
+    "hoggio-2524a": {
+      "hosting": {
+        "circles": [
+          "circles-9514b"
+        ]
+      }
+    }
   }
 }
