@@ -41,7 +41,7 @@ export default () => {
 
   return (
     <DataContext.Provider value={ { data: data, onSetData: handleSetData } }>
-      <Flex backgroundColor="background-shade-2" direction="vertical" grow>
+      <Flex backgroundColor="background-shade-1" direction="vertical" grow>
         <Flex
             alignChildrenVertical="middle"
             direction="horizontal"

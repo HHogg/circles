@@ -409,7 +409,6 @@ export default (props: Props) => {
   useEventListener(document, 'mouseup', handleMouseUp, [mode]);
   useEventListener(document, 'mousemove', handleMouseMove, [mode]);
   useEventListener(document, 'touchend', handleTouchEnd, [mode]);
-  useEventListener(document.body, 'touchmove', (event) => event.preventDefault(), [], { passive: false });
 
   return (
     <Flex direction="vertical" grow>
@@ -418,7 +417,6 @@ export default (props: Props) => {
           container
           grow
           ref={ refBounds }>
-
         <Flex absolute="fullscreen">
           { !!size.height && !!size.width && (
             <Appear animation="Fade">

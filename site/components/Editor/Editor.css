@@ -18,7 +18,7 @@
 }
 
 .CircleArt__intersection {
-  fill: var(--color-background--shade-2);
+  fill: var(--color-background--shade-1);
   fill-opacity: 1;
   stroke: var(--oc-gray-6);
   stroke-width: 0.5;
