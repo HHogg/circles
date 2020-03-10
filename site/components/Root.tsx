@@ -1,11 +1,16 @@
 import * as React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import Site from './Site';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import App from './App/App';
+import URLState from './URLState/URLState';
 
 export default () => {
   return (
     <BrowserRouter>
-      <Site />
+      <URLState>
+        <Switch>
+          <Route component={ App } path="/" />
+        </Switch>
+      </URLState>
     </BrowserRouter>
   );
 };
