@@ -1,99 +1,62 @@
 import * as React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { TypeTheme } from 'preshape';
-import URLStateContext, { URLStateContextProps } from './URLStateContext';
+import {
+  useUrlState,
+  URLStateDecoders,
+  URLStateDefaults,
+  URLStateEncoders,
+  URLStateValidators,
+} from 'preshape';
 
 export interface URLState {
-  debug?: boolean;
-  theme?: TypeTheme;
+  debug: boolean;
 }
 
-export const defaultValues: Required<URLState> = {
+const urlStateDecoders: URLStateDecoders<URLState> = {
+  debug: (v) => JSON.parse(v),
+};
+
+const urlStateDefaults: URLStateDefaults<URLState> = {
   debug: false,
-  theme: 'day',
 };
 
-const validators: { [K in keyof URLState]: (v: URLState[K]) => boolean } = {
+const urlStateEncoders: URLStateEncoders<URLState> = {
+  debug: (v) => v.toString(),
+};
+
+const urlStateValidators: URLStateValidators<URLState> = {
   debug: (v) => v === true || v === false,
-  theme: (v) => v === 'day' || v === 'night',
 };
 
-const getURLSearchParams = (search: string) => {
-  const urlSearchParams = new URLSearchParams(search);
+export const URLStateContext = React.createContext<URLState & {
+  onUpdateUrlState: (state: Partial<URLState>) => void;
+  push: (pathname: string) => void;
+  search: string;
+}>({
+  debug: false,
+  onUpdateUrlState: () => {},
+  push: () => {},
+  search: '',
+});
 
-  urlSearchParams.forEach((v, k) => {
-    try {
-      const key = k as keyof URLState;
-      const value = JSON.parse(v);
-      const validator = validators[key];
-
-      if (!validator || !validator(value) || defaultValues[key] === value) {
-        urlSearchParams.delete(k);
-      }
-    } catch (e) {
-      urlSearchParams.delete(k);
-    }
-  });
-
-  return urlSearchParams;
-};
-
-const getURLSearchParamsAsObject = (search: string) => {
-  const object: URLState = {};
-
-  getURLSearchParams(search).forEach((value, key) => {
-    object[key as keyof URLState] = JSON.parse(value);
-  });
-
-  Object.entries(defaultValues).forEach(([k, v]) => {
-    const key = k as keyof URLState;
-
-    if (!object.hasOwnProperty(key)) {
-      object[key] = v;
-    }
-  });
-
-  return object as Required<URLState>;
-};
-const URLState: React.FC<{}> = (props) => {
-  const history = useHistory();
+const URLState: React.FC<{}> = (props) => {const history = useHistory();
   const location = useLocation();
-  const refState = React.useRef<string>(location.search);
+  const state = useUrlState<URLState>({
+    decoders: urlStateDecoders,
+    defaults: urlStateDefaults,
+    encoders: urlStateEncoders,
+    onUpdateSearch: (search) => history.replace({ search }),
+    search: location.search,
+    validators: urlStateValidators,
+  });
 
-  const handleSetURLState = (search: string) => {
-    refState.current = search;
-    history.replace({ search });
-  };
-
-  const handleUpdateURLState = (state: Partial<URLState>) => {
-    const urlSearchParams = getURLSearchParams(location.search);
-
-    Object.entries(state).forEach(([k, v]) => {
-      const key = k as keyof URLState;
-      const validator = validators[key];
-
-      if (validator && validator(v) && defaultValues[key] !== v) {
-        urlSearchParams.set(key, JSON.stringify(v));
-      } else {
-        urlSearchParams.delete(key);
-      }
-    });
-
-    handleSetURLState(urlSearchParams.toString());
-  };
-
-  React.useEffect(() => {
-    handleSetURLState(getURLSearchParams(location.search).toString());
-  }, []);
-
-  const value: URLStateContextProps = {
-    ...getURLSearchParamsAsObject(location.search),
-    onUpdateURLState: handleUpdateURLState,
-    pushWithState: (path) => history.push(`${path}?${refState.current}`),
-  };
+  const push = (pathname: string) => history.push({
+    pathname: pathname,
+    search: state.search,
+  });
 
   return (
-    <URLStateContext.Provider { ...props } value={ value } />
+    <URLStateContext.Provider { ...props } value={ { ...state, push } } />
   );
 };
 

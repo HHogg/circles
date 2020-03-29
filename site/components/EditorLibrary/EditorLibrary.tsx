@@ -3,14 +3,14 @@ import { Flex, Grid, Link, Modal, ModalBody, ModalHeader, Text } from 'preshape'
 import { Data } from '../../Types';
 import configurations from './configurations';
 import { DataContext } from '../App/App';
-import URLStateContext from '../URLState/URLStateContext';
+import { URLStateContext } from '../URLState/URLState';
 
 export default () => {
   const { onSetData } = React.useContext(DataContext);
-  const { pushWithState } = React.useContext(URLStateContext);
+  const { push } = React.useContext(URLStateContext);
 
   const handleClose = () => {
-    pushWithState('/');
+    push('/');
   };
 
   const handleSelect = (config: Data) => {
