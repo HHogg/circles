@@ -9004,10 +9004,10 @@ prepend-http@^1.0.1:
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
   integrity sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=
 
-preshape@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/preshape/-/preshape-4.2.2.tgz#e13205b969133d5386d500b741b958e880013fad"
-  integrity sha512-zDbL4uwSthW5GAo2BSBMGLDnM3CKW9FIwEvhRz1DdC1CjRze10QMirI945s1j/26XG00VxNWc8qEtehIYqsYDA==
+preshape@^4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/preshape/-/preshape-4.3.2.tgz#2d8d70ef33c0e62d5677137d5cc4436198903886"
+  integrity sha512-9U/0HIP5MA2cCFkZ5RTh76O4utuUW4tNmezrkcS35siLuK2z4memNeiYOdDd7NHEF6sYTo8qLCzU84f5X32Ntw==
   dependencies:
     classnames "^2.2.5"
     framer-motion "^1.7.0"

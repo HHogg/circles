@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
-import { useTheme, Flex, Icon, Link, List, ListItem, ThemeSwitcher } from 'preshape';
+import { useLocalStorage, useTheme, Flex, Icon, Link, List, ListItem, ThemeSwitcher, TypeTheme } from 'preshape';
 import { Data, TypeMode } from '../../Types';
 import Fox from '../EditorLibrary/configurations/Fox.json';
 import About from '../About/About';
 import Editor from '../Editor/Editor';
 import EditorLibrary from '../EditorLibrary/EditorLibrary';
 import Logo from '../Logo/Logo';
-import URLStateContext from '../URLState/URLStateContext';
 
 export const DataContext = React.createContext<{
   data: Data;
@@ -18,11 +17,7 @@ export const DataContext = React.createContext<{
 });
 
 export default () => {
-  const {
-    onUpdateURLState,
-    theme,
-  } = React.useContext(URLStateContext);
-
+  const [theme, setTheme] = useLocalStorage<TypeTheme>('com.hogg.theme', 'day');
   const location = useLocation();
   const [data, onSetData] = React.useState<Data>(Fox);
   const [mode, onSetMode] = React.useState<TypeMode>('view');
@@ -80,7 +75,7 @@ export default () => {
 
               <ListItem>
                 <ThemeSwitcher
-                    onChange={ (theme) => onUpdateURLState({ theme }) }
+                    onChange={ setTheme }
                     theme={ theme } />
               </ListItem>
             </List>

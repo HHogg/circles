@@ -27,7 +27,7 @@ export default [{
   name: 'Whale',
   Thumbnail: require('./Whale.svg').default,
 }, {
-  author: '',
+  author: 'Harrison Hogg',
   config: require('./Flower.json'),
   name: 'Flower',
   Thumbnail: require('./Flower.svg').default,

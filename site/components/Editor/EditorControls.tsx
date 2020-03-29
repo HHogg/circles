@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useMatchMedia, Button, Buttons, CheckBox, Flex, Icon } from 'preshape';
 import { TypeMode } from '../../Types';
-import URLStateContext from '../URLState/URLStateContext';
+import { URLStateContext } from '../URLState/URLState';
 
 const canSave = typeof window !== 'undefined' && window.Blob !== undefined;
 
@@ -19,7 +19,7 @@ interface Props {
 export default (props: Props) => {
   const match = useMatchMedia(['600px', '800px']);
   const { canUndo, canRedo, mode, onChangeMode, onClear, onRedo, onSave, onUndo } = props;
-  const { debug, onUpdateURLState } = React.useContext(URLStateContext);
+  const { debug, onUpdateUrlState } = React.useContext(URLStateContext);
 
   return (
     <Flex
@@ -81,7 +81,7 @@ export default (props: Props) => {
               checked={ debug }
               label="Debug"
               margin="x2"
-              onChange={ () => onUpdateURLState({ debug: !debug }) } />
+              onChange={ () => onUpdateUrlState({ debug: !debug }) } />
         </Flex>
       ) }
 

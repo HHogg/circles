@@ -1,13 +1,16 @@
-import Two, { Circle } from 'two.js';
+import Two from 'two.js';
 import { v4 } from 'uuid';
 import classnames from 'classnames';
 import flatten from 'lodash.flatten';
 import { colorAccent1Shade1, colorNegativeShade1, colorPositiveShade1 } from 'preshape';
-import { Data, Intersection, IntersectionBase, IntersectionCircle, TypeMode, IntersectionVector } from '../../Types';
+import { Data, Intersection, IntersectionCircle, TypeMode } from '../../Types';
 import isPointWithinCircle from '../../utils/math/isPointWithinCircle';
 import { createCircle, createPolygonArc, createText } from '../../utils/Two';
 import getCircleArea from '../../utils/math/getCircleArea';
 import getIntersectionAreas from '../../utils/getIntersectionAreas/getIntersectionAreas';
+import Area from '../../utils/getIntersectionAreas/Area';
+import Circle from '../../utils/getIntersectionAreas/Circle';
+import Vector from '../../utils/getIntersectionAreas/Vector';
 
 const getIntersectionClassName = ({ filled, underlay }: Intersection) =>
   classnames('CircleArt__intersection', {
@@ -19,7 +22,7 @@ const getIntersectionClassName = ({ filled, underlay }: Intersection) =>
 export default class EditorDrawer {
   circles: IntersectionCircle[];
   data?: Data;
-  intersections: IntersectionBase[];
+  intersections: Intersection[];
   layerDebug?: Two.Group;
   layerIntersections?: Two.Group;
   layerCircles?: Two.Group;
@@ -240,12 +243,12 @@ export default class EditorDrawer {
     }
   }
 
-  drawDebug(areas: Intersection[], circles: Intersection[], vectors: IntersectionVector[]) {
+  drawDebug(areas: Area[], circles: Circle[], vectors: Vector[]) {
 
     /* eslint-disable no-console */
     console.log(circles);
     console.info(`Areas: ${areas.length}`);
-    console.info(`Cirlces: ${circles.length}`);
+    console.info(`Circles: ${circles.length}`);
     console.info(`Vectors: ${vectors.length}`);
     console.info(areas);
     console.info(circles);

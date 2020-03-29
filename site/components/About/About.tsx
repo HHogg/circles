@@ -8,13 +8,13 @@ import {
   Text,
 } from 'preshape';
 import Logo from '../Logo/Logo';
-import URLStateContext from '../URLState/URLStateContext';
+import { URLStateContext } from '../URLState/URLState';
 
 export default () => {
-  const { pushWithState } = React.useContext(URLStateContext);
+  const { push } = React.useContext(URLStateContext);
 
   const handleClose = () => {
-    pushWithState('/');
+    push('/');
   };
 
   return (
