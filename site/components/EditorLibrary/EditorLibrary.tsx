@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Flex, Grid, Link, Modal, ModalBody, ModalHeader, Text } from 'preshape';
 import { Data } from '../../Types';
 import configurations from './configurations';
-import { DataContext } from '../App/App';
+import { AppContext } from '../App/App';
 import { URLStateContext } from '../URLState/URLState';
 
 export default () => {
-  const { onSetData } = React.useContext(DataContext);
+  const { onSetData } = React.useContext(AppContext);
   const { push } = React.useContext(URLStateContext);
 
   const handleClose = () => {

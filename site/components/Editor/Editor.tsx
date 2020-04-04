@@ -5,6 +5,7 @@ import { useEventListener, useLocalStorage, useResizeObserver, Appear, Flex, Typ
 import { Data, TypeMode, IntersectionCircle, Intersection } from '../../Types';
 import atan2 from '../../utils/math/atan2';
 import isPointOverCircleEdge from '../../utils/math/isPointOverCircleEdge';
+import { AppContext } from '../App/App';
 import EditorControls from './EditorControls';
 import EditorDrawer from './EditorDrawer';
 import EditorHistory from './EditorHistory';
@@ -93,7 +94,7 @@ interface Props {
 export default (props: Props) => {
   const { data, mode, onChangeMode, onClearData } = props;
   const { debug } = React.useContext(URLStateContext);
-  const [theme] = useLocalStorage<TypeTheme>('com.hogg.theme', 'day');
+  const { theme } = React.useContext(AppContext);
   const [toolbarTarget, setToolbarTarget] = React.useState<ToolbarTarget | null>(null);
   const refActiveCircle = React.useRef<IntersectionCircle | null>(null);
   const refActiveCirclePost = React.useRef<IntersectionCircle | null>(null);

@@ -8,12 +8,14 @@ import Editor from '../Editor/Editor';
 import EditorLibrary from '../EditorLibrary/EditorLibrary';
 import Logo from '../Logo/Logo';
 
-export const DataContext = React.createContext<{
+export const AppContext = React.createContext<{
   data: Data;
   onSetData: (data: Data) => void;
+  theme: TypeTheme;
 }>({
   data: { circles: [], intersections: [] },
   onSetData: () => {},
+  theme: 'day',
 });
 
 export default () => {
@@ -35,7 +37,7 @@ export default () => {
   useTheme(theme);
 
   return (
-    <DataContext.Provider value={ { data: data, onSetData: handleSetData } }>
+    <AppContext.Provider value={ { data: data, onSetData: handleSetData, theme: theme } }>
       <Flex backgroundColor="background-shade-1" direction="vertical" grow>
         <Flex
             alignChildrenVertical="middle"
@@ -95,7 +97,7 @@ export default () => {
               onClearData={ handleClear } />
         </Flex>
       </Flex>
-    </DataContext.Provider>
+    </AppContext.Provider>
   );
 };
 

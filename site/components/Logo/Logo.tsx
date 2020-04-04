@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useLocalStorage, TypeTheme } from 'preshape';
 import LogoDay from '../../assets/C-day.svg';
 import LogoNight from '../../assets/C-night.svg';
+import { AppContext } from '../App/App';
 
 interface Props extends React.SVGAttributes<SVGSVGElement> {}
 
 export default (props: Props) => {
-  const [theme] = useLocalStorage<TypeTheme>('com.hogg.theme', 'day');
+  const { theme } = React.useContext(AppContext);
 
   return theme === 'day'
     ? <LogoDay { ...props } />

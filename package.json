@@ -29,7 +29,7 @@
     "lodash.mean": "^4.1.0",
     "parcel-bundler": "^1.12.3",
     "postcss-preset-env": "^6.6.0",
-    "preshape": "^4.3.2",
+    "preshape": "^4.4.0",
     "react": ">=16.6.0",
     "react-dom": ">=16.6.0",
     "react-router-dom": "^5.1.2",
