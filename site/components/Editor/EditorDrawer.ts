@@ -346,7 +346,7 @@ export default class EditorDrawer {
     const circle = id && this.getCircleByID(id);
     const path = id && this.paths[id];
 
-    if (circle && path) {
+    if (circle && path && radius) {
       circle.radius = radius;
       circle.x = x;
       circle.y = y;

@@ -1448,6 +1448,11 @@
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.3.tgz#9c088679876f374eb5983f150d4787aa6fb32d7e"
   integrity sha512-FvUupuM3rlRsRtCN+fDudtmytGO6iHJuuRKS1Ss0pG5z8oX0diNEw94UEL7hgDbpN94rgaK5R7sWm6RrSkZuAQ==
 
+"@types/uuid@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-7.0.2.tgz#d680a9c596ef84abf5c4c07a32ffd66d582526f8"
+  integrity sha512-8Ly3zIPTnT0/8RCU6Kg/G3uTICf9sRwYOpUzSIM3503tLIKcnJPRuinHhXngJUy2MntrEf6dlpOHXJju90Qh5w==
+
 "@types/vfile-message@*":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/vfile-message/-/vfile-message-2.0.0.tgz#690e46af0fdfc1f9faae00cd049cc888957927d5"
@@ -8983,10 +8988,10 @@ prepend-http@^1.0.1:
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
   integrity sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=
 
-preshape@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/preshape/-/preshape-4.4.0.tgz#9c1fa9cc6b3a28b3754b2435ccf053e7fe6864f5"
-  integrity sha512-dH7aTpEE+eNMn9ntDhnwJMireAf85CbQaRHXVwF6ohTjmHG4c+oLgJUsSx/e9WLeBqgA69ivEFw0w+K0UQ4jGw==
+preshape@^4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/preshape/-/preshape-4.5.2.tgz#11f14e6ca0a6363735d58ae6613c9df05da86746"
+  integrity sha512-Ja08Xedn7H5GP1/Xo4OZULbdShQbn65YS6RPZoYSNXPkc6NeL1+cMX6rcf1XqwL9dteRuTjxPB1sHwPutn2VQA==
   dependencies:
     brace "^0.11.1"
     classnames "^2.2.5"
@@ -11453,6 +11458,11 @@ uuid@^3.0.0, uuid@^3.3.2, uuid@^3.3.3:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
+  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
 v8-compile-cache@^2.0.0, v8-compile-cache@^2.1.0:
   version "2.1.0"
