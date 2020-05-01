@@ -1,3 +1,3 @@
-import { Shape } from '../../Types';
+import { IntersectionCircle } from '../../Types';
 
-export default ({ radius }: Shape) => Math.PI * (radius ** 2);
+export default ({ radius }: IntersectionCircle) => Math.PI * (radius ** 2);

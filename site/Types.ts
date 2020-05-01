@@ -29,7 +29,7 @@ export interface Intersection {
 export interface IntersectionArc {
   a1: number;
   a2: number;
-  convex: boolean;
+  convex?: boolean;
   radius: number;
   x: number;
   y: number;

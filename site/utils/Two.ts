@@ -3,23 +3,32 @@ import Two from 'two.js';
 const PI = Math.PI;
 const HALF_PI = PI / 2;
 
-interface StyleProps {
-  fill: string;
-  fillOpacity: number;
-  opacity: number;
-  rotate: number;
-  stroke: string;
-  strokeWidth: number;
+interface ShapeProps {
+  fill?: string;
+  opacity?: number;
+  radius?: number;
+  rotate?: number;
+  stroke?: string;
+  strokeDasharray?: [number, number];
+  strokeWidth?: number;
   translate?: boolean;
 }
 
-const createShape = (shape: Two.Path, props: StyleProps) => {
+interface ArcProps extends ShapeProps {
+  a1: number;
+  a2: number;
+  cx: number;
+  cy: number;
+  radius: number;
+}
+
+const createShape = (shape: Two.Path, props: ShapeProps) => {
   const {
     fill = 'transparent',
-    fillOpacity = 1,
     opacity = 1,
     rotate = 0,
     stroke = 'transparent',
+    strokeDasharray,
     strokeWidth = 0,
     translate,
   } = props;
@@ -40,86 +49,30 @@ const createShape = (shape: Two.Path, props: StyleProps) => {
   }
 
   shape.fill = fill;
-  shape.fillOpacity = fillOpacity;
   shape.stroke = stroke;
   shape.linewidth = strokeWidth;
   shape.opacity = opacity;
   shape.rotation = rotate;
 
+  if (strokeDasharray) {
+    shape.dashes[0] = strokeDasharray[0];
+    shape.dashes[1] = strokeDasharray[1];
+  }
+
   return shape;
 };
 
-export const createArc = (props) => {
-  return createShape(
-    new Two.Path(arcsToAnchors([props]), false, false, true),
-  props);
-};
-
-export const createCircle = (props) => {
+export const createCircle = (props: ShapeProps & { radius: number; x: number; y: number }) => {
   return createShape(
     new Two.Circle(props.x, props.y, props.radius),
   props);
 };
 
-export const createEllipse = (props) => {
-  return createShape(
-    new Two.Ellipsie(props.x, props.y, props.width, props.height),
-  props);
+export const createText = (text: string, props: ShapeProps & { x: number; y: number }) => {
+  return new Two.Text(text, props.x, props.y, props);
 };
 
-export const createGroup = (props = {}) => {
-  const group = new Two.Group();
-
-  if (props.x !== undefined && props.y !== undefined) {
-    group.translation.set(props.x, props.y);
-  }
-
-  return group;
-};
-
-export const createLine = (props) => {
-  return createShape(
-    new Two.Path(
-      props.vertices.map(([x, y]) =>
-        new Two.Vector(x, y)
-      ),
-    false, props.curved),
-  props);
-};
-
-export const createPolygon = (props) => {
-  return createShape(
-    new Two.Path(
-      props.vertices.map(([x, y]) =>
-        new Two.Vector(x, y)
-      ),
-    true, props.curved),
-  props);
-};
-
-export const createPolygonArc = (props) => {
-  return createShape(
-    new Two.Path(arcsToAnchors(props.arcs, true), true, false, true),
-  props);
-};
-
-export const createText = (text, props) => {
-  return createShape(
-    new Two.Text(text, props.x, props.y, props),
-  props);
-};
-
-export const createTriangle = (props) => {
-  return createShape(
-    new Two.Path([
-      new Two.Vector(props.x, props.y - (props.height / 2)),
-      new Two.Vector(props.x + (props.width / 2), props.y + (props.height / 2)),
-      new Two.Vector(props.x - (props.width / 2), props.y + (props.height / 2)),
-    ], true),
-  props);
-};
-
-const arcsToAnchors = (arcs, closed) => {
+const arcsToAnchors = (arcs: ArcProps[], closed?: boolean) => {
   const R = Two.Resolution * 3;
   const anchors = Array
     .from({ length: (R * arcs.length) })
@@ -170,4 +123,10 @@ const arcsToAnchors = (arcs, closed) => {
   }
 
   return anchors;
+};
+
+export const createPolygonArc = (props: ShapeProps & { arcs: ArcProps[] }) => {
+  return createShape(
+    new Two.Path(arcsToAnchors(props.arcs, true), true, false, true),
+  props);
 };

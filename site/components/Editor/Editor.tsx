@@ -1,16 +1,16 @@
 import * as React from 'react';
 import classnames from 'classnames';
 import FileSaver from 'file-saver';
-import { useEventListener, useLocalStorage, useResizeObserver, Appear, Flex, TypeTheme } from 'preshape';
+import { useEventListener, useResizeObserver, Appear, Flex } from 'preshape';
 import { Data, TypeMode, IntersectionCircle, Intersection } from '../../Types';
 import atan2 from '../../utils/math/atan2';
 import isPointOverCircleEdge from '../../utils/math/isPointOverCircleEdge';
-import { AppContext } from '../App/App';
+import { AppContext } from '../App';
 import EditorControls from './EditorControls';
 import EditorDrawer from './EditorDrawer';
 import EditorHistory from './EditorHistory';
 import EditorToolbar from './EditorToolbar';
-import { URLStateContext } from '../URLState/URLState';
+import { URLStateContext } from '../URLState';
 import './Editor.css';
 
 interface MinimalEvent {
@@ -419,11 +419,11 @@ export default (props: Props) => {
           container
           grow
           ref={ refBounds }>
-        <Flex absolute="fullscreen">
+        <Flex absolute="edge-to-edge">
           { !!size.height && !!size.width && (
             <Appear animation="Fade">
               <Flex
-                  absolute="fullscreen"
+                  absolute="edge-to-edge"
                   className={ classes }
                   onMouseDown={ handleMouseDown }
                   onTouchMove={ (e) => handleMouseMove(minimalEvent(e)) }

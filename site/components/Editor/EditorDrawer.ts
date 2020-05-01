@@ -269,7 +269,7 @@ export default class EditorDrawer {
     /* Debug Circles */
     this.layerDebug.add(...flatten(
       circles.map(({ n, segments, x, y }) => [
-        createText(n, {
+        createText(n.toString(), {
           alignment: 'middle',
           fill: colorNegativeShade1,
           family: 'script',
@@ -284,7 +284,7 @@ export default class EditorDrawer {
           x: mx,
           y: my,
         })),
-        ...segments.map(({ mx, my, n }) => createText(n, {
+        ...segments.map(({ mx, my, n }) => createText(n ? n.toString() : '', {
           alignment: 'middle',
           family: 'script',
           fill: colorNegativeShade1,
@@ -305,7 +305,7 @@ export default class EditorDrawer {
           x: x,
           y: y,
         }),
-        createText(n, {
+        createText(n.toString(), {
           alignment: 'middle',
           fill: colorAccent1Shade1,
           family: 'script',

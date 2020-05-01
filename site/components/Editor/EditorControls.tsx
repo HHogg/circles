@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useMatchMedia, Button, Buttons, CheckBox, Flex, Icon } from 'preshape';
 import { TypeMode } from '../../Types';
-import { URLStateContext } from '../URLState/URLState';
+import { URLStateContext } from '../URLState';
 
 const canSave = typeof window !== 'undefined' && window.Blob !== undefined;
 
@@ -79,9 +79,10 @@ export default (props: Props) => {
         <Flex>
           <CheckBox
               checked={ debug }
-              label="Debug"
               margin="x2"
-              onChange={ () => onUpdateUrlState({ debug: !debug }) } />
+              onChange={ () => onUpdateUrlState({ debug: !debug }) }>
+            Debug
+          </CheckBox>
         </Flex>
       ) }
 

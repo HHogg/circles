@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Flex, Grid, Link, Modal, ModalBody, ModalHeader, Text } from 'preshape';
-import { Data } from '../../Types';
-import configurations from './configurations';
-import { AppContext } from '../App/App';
-import { URLStateContext } from '../URLState/URLState';
+import { Data } from '../Types';
+import configurations from '../configurations';
+import { AppContext } from './App';
+import { URLStateContext } from './URLState';
 
 export default () => {
   const { onSetData } = React.useContext(AppContext);

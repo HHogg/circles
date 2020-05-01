@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
-import { useLocalStorage, useTheme, Flex, Icon, Link, List, ListItem, ThemeSwitcher, TypeTheme } from 'preshape';
-import { Data, TypeMode } from '../../Types';
-import Fox from '../EditorLibrary/configurations/Fox.json';
-import About from '../About/About';
-import Editor from '../Editor/Editor';
-import EditorLibrary from '../EditorLibrary/EditorLibrary';
-import Logo from '../Logo/Logo';
+import { useLocalStorage, useTheme, Flex, Icon, Link, List, ListItem, ThemeSwitcher, Tooltip, TypeTheme } from 'preshape';
+import { Data, TypeMode } from '../Types';
+import Fox from '../configurations/Fox.json';
+import About from './About';
+import Editor from './Editor/Editor';
+import Library from './Library';
+import Logo from './Logo';
 
 export const AppContext = React.createContext<{
   data: Data;
@@ -58,21 +58,43 @@ export default () => {
           <Flex>
             <List gap="x2">
               <ListItem separator="|">
-                <Link title="Library" to={ `/library${location.search}` }>
-                  <Icon name="Book" size="1.25rem" />
-                </Link>
+                <Tooltip content="Library">
+                  { (props) => (
+                    <Link { ...props }
+                        display="block"
+                        title="Library"
+                        to={ `/library${location.search}` }>
+                      <Icon name="Book" size="1.25rem" />
+                    </Link>
+                  ) }
+                </Tooltip>
               </ListItem>
 
               <ListItem separator="|">
-                <Link title="About" to={ `/about${location.search}` }>
-                  <Icon name="Info" size="1.25rem" />
-                </Link>
+                <Tooltip content="About">
+                  { (props) => (
+                    <Link { ...props }
+                        display="block"
+                        title="About"
+                        to={ `/about${location.search}` }>
+                      <Icon name="Info" size="1.25rem" />
+                    </Link>
+                  ) }
+                </Tooltip>
               </ListItem>
 
               <ListItem separator="|">
-                <Link href="https://github.com/HHogg/circles" target="Github" title="Github">
-                  <Icon name="Github" size="1.25rem" />
-                </Link>
+                <Tooltip content="Github">
+                  { (props) => (
+                    <Link { ...props }
+                        display="block"
+                        href="https://github.com/HHogg/circles"
+                        target="Github"
+                        title="Github">
+                      <Icon name="Github" size="1.25rem" />
+                    </Link>
+                  ) }
+                </Tooltip>
               </ListItem>
 
               <ListItem>
@@ -87,7 +109,7 @@ export default () => {
         <Flex basis="none" direction="vertical" grow>
           <Switch>
             <Route component={ About } path="/about" />
-            <Route component={ EditorLibrary } path="/library" />
+            <Route component={ Library } path="/library" />
           </Switch>
 
           <Editor

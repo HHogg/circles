@@ -7,8 +7,8 @@ import {
   ModalHeader,
   Text,
 } from 'preshape';
-import Logo from '../Logo/Logo';
-import { URLStateContext } from '../URLState/URLState';
+import { URLStateContext } from './URLState';
+import Logo from './Logo';
 
 export default () => {
   const { push } = React.useContext(URLStateContext);
