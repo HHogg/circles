@@ -29,6 +29,7 @@
     "lodash.floor": "^4.0.4",
     "lodash.mean": "^4.1.0",
     "parcel-bundler": "^1.12.3",
+    "parcel-plugin-html-externals": "^0.2.0",
     "postcss-preset-env": "^6.6.0",
     "preshape": "^5.0.1",
     "react": ">=16.6.0",
@@ -58,5 +59,8 @@
     "eslint-plugin-react": "^7.12.4",
     "stylelint": "^13.2.0",
     "stylelint-config-preshape": "^2.0.0"
+  },
+  "externals": {
+    "/__/**/*": false
   }
 }
