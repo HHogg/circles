@@ -94,7 +94,10 @@ export default (shapes: IntersectionCircle[]) => {
 
   return {
     areas: areas
-      .filter((area) => !area.arcs.length || !area.arcs.every((arc) => !arc.isConvex(area.arcs)))
+      .filter(area =>
+        (area instanceof Circle && area.arcs.length == 0) || // Only stand-alone circles...
+        area.area > 0 // ... and interior regions
+      )
       .sort((a, b) => b.area - a.area),
     circles: circles,
     vectors: vectors,
