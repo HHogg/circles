@@ -96,7 +96,7 @@ export default (shapes: IntersectionCircle[]) => {
     areas: areas
       .filter(area =>
         (area instanceof Circle && area.arcs.length == 0) || // Only stand-alone circles...
-        area.area > 0 // ... and interior regions
+        (area instanceof Area && area.area > 0) // ... and interior regions
       )
       .sort((a, b) => b.area - a.area),
     circles: circles,
