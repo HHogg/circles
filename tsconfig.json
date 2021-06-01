@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
     "esModuleInterop": true,
-    "jsx": "react",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
-    "paths": {
-      "*" : ["@types/*"]
-    },
     "resolveJsonModule": true,
+    "sourceMap": true,
     "strict": true,
     "target": "ES2017"
   }

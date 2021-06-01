@@ -29,7 +29,6 @@
     "lodash.floor": "^4.0.4",
     "lodash.mean": "^4.1.0",
     "parcel-bundler": "^1.12.3",
-    "parcel-plugin-html-externals": "^0.2.0",
     "postcss-preset-env": "^6.6.0",
     "preshape": "^5.0.1",
     "react": ">=16.6.0",
@@ -51,16 +50,10 @@
     "@types/react-router-dom": "*",
     "@types/two.js": "*",
     "@types/uuid": "^7.0.2",
-    "@typescript-eslint/eslint-plugin": "^1.13.0",
-    "@typescript-eslint/parser": "^1.13.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.15.1",
-    "eslint-config-preshape": "^1.1.0",
+    "eslint": "^7.2.0",
+    "eslint-config-preshape": "^2.0.0",
     "eslint-plugin-react": "^7.12.4",
     "stylelint": "^13.2.0",
     "stylelint-config-preshape": "^2.0.0"
-  },
-  "externals": {
-    "/__/**/*": false
   }
 }
