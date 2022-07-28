@@ -16,9 +16,12 @@
         "value": "public, max-age=604800"
       }]
     }],
-    "rewrites": [{
-      "source": "**",
-      "destination": "/index.html"
-    }]
+    "redirects": [
+      {
+        "source": "/",
+        "destination": "https://hogg.io/projects/circle-art",
+        "type": 301
+      }
+    ]
   }
 }
